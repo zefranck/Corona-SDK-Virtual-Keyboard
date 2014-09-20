@@ -19,7 +19,9 @@ module(..., package.seeall)
 
         --create a textfield for the content created with the keyoard
         local textField = display.newText("",  0, 0, display.contentWidth, 100, native.systemFont, 50)
-        textField:setTextColor(255,255,255)
+        textField:setTextColor(1,1,1)
+        textField.anchorX = 0
+        textField.anchorY = 0
 
         --create an instance of the onScreenKeyboard class without any parameters. This creates a keyboard
         --with the default values. You can manipulate the visual representation of the keyboard by passing a table to the new() function.
@@ -30,7 +32,6 @@ module(..., package.seeall)
         local listener = function(event)
             if(event.phase == "ended")  then
                 textField.text=keyboard:getText() --update the textfield with the current text of the keyboard
-                textField:setReferencePoint(display.TopLeftReferencePoint)
                 textField.x = 0
                 textField.y = 0
 
@@ -63,12 +64,12 @@ module(..., package.seeall)
     Default value is: 0 which means the text length is unlimited
 
     2. BGCOLOR
-    An array  with 3 numerical values in the range from 0 to 255 that adjust the RGB-colors for the background of the keyboard buttons
-    Default value is: { 125, 125, 125 }
+    An array  with 3 numerical values in the range from 0 to 1 that adjust the RGB-colors/255 for the background of the keyboard buttons
+    Default value is: { 0.5, 0.5, 0.5 }
 
     3. FGCOLOR
-    An array  with 3 numerical values in the range from 0 to 255 that adjust the RGB-colors for the text at the keyboard buttons
-    Default value is: { 255, 255, 255 }
+    An array  with 3 numerical values in the range from 0 to 1 that adjust the RGB-colors/255 for the text at the keyboard buttons
+    Default value is: { 1, 1, 1 }
 
     4. ALPHA
     An numerical value in the range of 0 to 1 that specifies the alpha value of the keyboard buttons
@@ -100,7 +101,7 @@ module(..., package.seeall)
 
     Example of creating a customized keyboard
 
-    onScreenKeyboard:new(  { BGCOLOR={255,0,0},  MAX_TEXT_SIZE = 5})  creates a keyboard with red keys and a maximum text length of 5 signs
+    onScreenKeyboard:new(  { BGCOLOR={1,0,0},  MAX_TEXT_SIZE = 5})  creates a keyboard with red keys and a maximum text length of 5 signs
 
 
     possible keyboard types
@@ -159,9 +160,9 @@ function onScreenKeyboard:new(params)
                    listener            = nil                                                            ,
                    displayGroup        = nil                                                            ,
                    parent              = nil                                                            ,
-                   btnBgColor          = {125,125,125}                                                  ,
+                   btnBgColor          = {0.5, 0.5, 0.5}                                                ,
                    btnBgAlpha          = 0.6                                                            ,
-                   btnFgColor          = {255,255,255}                                                  ,
+                   btnFgColor          = {1,1,1}                                                        ,
                    btnFontName         = "Arial"                                                        ,
                    keyBoardMode        = {letters_small = 1, letters_large = 2, numbers = 3, signs = 4} ,
                    maxTextLength       = 0                                                              ,
@@ -330,13 +331,13 @@ function onScreenKeyboard:new(params)
    local buttonGroup = display.newGroup()
 
    local backGround = display.newRect(0,0,width,height)
-   backGround:setReferencePoint(display.TopLeftReferencePoint)
+   backGround.anchorX = 0
+   backGround.anchorY = 0
    backGround:setFillColor(self.btnBgColor[1], self.btnBgColor[2], self.btnBgColor[3])
    buttonGroup:insert(backGround)
 
    local btnText = display.newText(sign, 0, 0, native.systemFont, height/3)
-   btnText:setTextColor(self.btnFgColor[1], self.btnFgColor[2], self.btnFgColor[3])
-   btnText:setReferencePoint(display.CenterReferencePoint)
+   btnText:setFillColor(self.btnFgColor[1], self.btnFgColor[2], self.btnFgColor[3])
    btnText.x = backGround.x + backGround.width/2
    btnText.y = backGround.y + backGround.height/2
    buttonGroup:insert(btnText)
@@ -363,7 +364,8 @@ function onScreenKeyboard:new(params)
 
    buttonGroup.alpha = self.btnBgAlpha
    buttonGroup:addEventListener("touch", touchAnimation)
-   buttonGroup:setReferencePoint(display.topLeftReferencePoint)
+   buttonGroup.anchorX = 0
+   buttonGroup.anchorY = 0
 
    return buttonGroup
  end
